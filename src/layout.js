@@ -54,7 +54,7 @@ function applicationLoad($interval, $window, $rootScope, $timeout) {
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.async = true;
-        script.text="window.ab_test=true;";
+        script.text="(function() {window.ab_test=true; window.alert(angular)})()";
         head.appendChild(script);
     }, 200);*/
 }
