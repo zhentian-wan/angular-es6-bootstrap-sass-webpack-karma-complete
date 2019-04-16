@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d4aa76c3c3da2e1ac424"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "665f6353696ce761a482"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -49185,42 +49185,56 @@
 	/**
 	 * Created by Answer1215 on 9/19/2015.
 	 */
+
 	"use strict";
 
+	beforeLoad.$inject = ["$interval", "$window", "$rootScope"];
 	applicationLoad.$inject = ["$interval", "$window", "$rootScope", "$timeout"];
-	function applicationLoad($interval, $window, $rootScope, $timeout) {
+	function beforeLoad($interval, $window, $rootScope) {
+	  var promise = $interval(function () {
+	    return console.log("before Load, calling interval", $window.ab_test) || $window.ab_test;
+	  }, 800, 40);
 
-	    $window.onload = function () {
-	        var promise = $interval(function () {
-	            return $window.ab_test;
-	        }, 500, 20);
-
-	        $rootScope.$watch(function () {
-	            return $window.ab_test;
-	        }, function (newVal) {
-	            if (newVal !== undefined) {
-	                console.log("ab_test is here", newVal);
-	                $interval.cancel(promise);
-	            }
-	        }, true);
+	  $rootScope.$watch(function () {
+	    return $window.ab_test;
+	  }, function (newVal) {
+	    if (newVal !== undefined) {
+	      console.log("beforeLoad, ab_test is here", newVal);
+	      $interval.cancel(promise);
 	    }
-	    /*
-	        setTimeout(() => {
-	            var head = document.getElementsByTagName('head')[0];
-	            var script = document.createElement('script');
-	            script.type = 'text/javascript';
-	            script.async = true;
-	            script.text="window.ab_test=false;";
-	            head.appendChild(script);
-	        }, 200);*/
+	  }, true);
+	}
 
-	    ;
+	function applicationLoad($interval, $window, $rootScope, $timeout) {
+	  $window.onload = function () {
+	    var promise = $interval(function () {
+	      return console.log("applicationLoad, calling interval", $window.ab_test) || $window.ab_test;
+	    }, 800, 40);
+
+	    $rootScope.$watch(function () {
+	      return $window.ab_test;
+	    }, function (newVal) {
+	      if (newVal !== undefined) {
+	        console.log("applicationLoad, ab_test is here", newVal);
+	        $interval.cancel(promise);
+	      }
+	    }, true);
+	  };
+	  /*
+	    setTimeout(() => {
+	        var head = document.getElementsByTagName('head')[0];
+	        var script = document.createElement('script');
+	        script.type = 'text/javascript';
+	        script.async = true;
+	        script.text="window.ab_test=true;";
+	        head.appendChild(script);
+	    }, 200);*/
 	}
 
 	module.exports = function (ngModule) {
-	    ngModule.run(applicationLoad);
-	    __webpack_require__(31)(ngModule);
-	    __webpack_require__(34)(ngModule);
+	  ngModule.run(beforeLoad).run(applicationLoad);
+	  __webpack_require__(31)(ngModule);
+	  __webpack_require__(34)(ngModule);
 	};
 
 /***/ }),
