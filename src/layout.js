@@ -15,7 +15,7 @@ function applicationLoad($interval, $window, $rootScope, $timeout) {
             }
         }, true);
     }
-
+/*
     setTimeout(() => {
         var head = document.getElementsByTagName('head')[0];
         var script = document.createElement('script');
@@ -23,7 +23,7 @@ function applicationLoad($interval, $window, $rootScope, $timeout) {
         script.async = true;
         script.text="window.ab_test=false;";
         head.appendChild(script);
-    }, 200);
+    }, 200);*/
 
 
 }

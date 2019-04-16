@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "57fdd40e6413738d162e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d4aa76c3c3da2e1ac424"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -49187,28 +49187,34 @@
 	 */
 	"use strict";
 
-	applicationLoad.$inject = ["$window", "$rootScope", "$timeout"];
-	function applicationLoad($window, $rootScope, $timeout) {
-	    /*$timeout(() => {
-	        var head = document.getElementsByTagName('head')[0];
-	        var script = document.createElement('script');
-	        script.type = 'text/javascript';
-	        script.onload = function() {
-	            callFunctionFromScript();
-	        }
-	        script.text="window.ab_test=true";
-	        head.appendChild(script);
-	    }, 100);*/
+	applicationLoad.$inject = ["$interval", "$window", "$rootScope", "$timeout"];
+	function applicationLoad($interval, $window, $rootScope, $timeout) {
 
 	    $window.onload = function () {
+	        var promise = $interval(function () {
+	            return $window.ab_test;
+	        }, 500, 20);
+
 	        $rootScope.$watch(function () {
 	            return $window.ab_test;
 	        }, function (newVal) {
-	            if (!!newVal) {
+	            if (newVal !== undefined) {
 	                console.log("ab_test is here", newVal);
+	                $interval.cancel(promise);
 	            }
-	        });
-	    };
+	        }, true);
+	    }
+	    /*
+	        setTimeout(() => {
+	            var head = document.getElementsByTagName('head')[0];
+	            var script = document.createElement('script');
+	            script.type = 'text/javascript';
+	            script.async = true;
+	            script.text="window.ab_test=false;";
+	            head.appendChild(script);
+	        }, 200);*/
+
+	    ;
 	}
 
 	module.exports = function (ngModule) {
