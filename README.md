@@ -2,4 +2,4 @@
 
 A start up with Angular and Webpack.
 
-[Site](https://5cb4e73dd9eb38ac7853842e--zhentianabtest.netlify.com/)
+[Site](https://5cb74ca78023d17002843a90--zhentianabtest.netlify.com/)

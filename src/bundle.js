@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "665f6353696ce761a482"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "78f05895feba64ccaf4c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -49226,7 +49226,7 @@
 	        var script = document.createElement('script');
 	        script.type = 'text/javascript';
 	        script.async = true;
-	        script.text="window.ab_test=true;";
+	        script.text="(function() {window.ab_test=true; window.alert(angular)})()";
 	        head.appendChild(script);
 	    }, 200);*/
 	}
@@ -49318,29 +49318,42 @@
 	 * Created by Answer1215 on 9/19/2015.
 	 */
 
-	var bodyCtrl = function bodyCtrl() {
-	    _classCallCheck(this, bodyCtrl);
+	var bodyCtrl =
+	/**ngInject */
+	function bodyCtrl($rootScope, $window) {
+	  var _this = this;
+
+	  _classCallCheck(this, bodyCtrl);
+
+	  $rootScope.$watch(function () {
+	    return $window.ab_test;
+	  }, function (newVal) {
+	    if (!!newVal) {
+	      _this.hasAb = true;
+	    }
+	  });
 	};
+	bodyCtrl.$inject = ["$rootScope", "$window"];
 
 	function expBody() {
-	    return {
-	        restrict: "E",
-	        scope: {},
-	        controller: bodyCtrl,
-	        controllerAs: "body",
-	        template: __webpack_require__(36)
-	    };
+	  return {
+	    restrict: "E",
+	    scope: {},
+	    controller: bodyCtrl,
+	    controllerAs: "vm",
+	    template: __webpack_require__(36)
+	  };
 	}
 
 	module.exports = function (ngModule) {
-	    ngModule.directive("expBody", expBody);
+	  ngModule.directive("expBody", expBody);
 	};
 
 /***/ }),
 /* 36 */
 /***/ (function(module, exports) {
 
-	module.exports = "<section>\n    <div class=\"row\">\n        <div class=\"col-sm-6\">Hello World</div>\n        <div class=\"col-sm-6\">Hello World</div>\n    </div>\n</section>"
+	module.exports = "<section>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">Hello World</div>\n    <div class=\"col-sm-6\">Hello World</div>\n    <div class=\"col-sm-12\" ng-if=\"vm.hasAb\">Hello World</div>\n  </div>\n</section>\n"
 
 /***/ })
 /******/ ]);
