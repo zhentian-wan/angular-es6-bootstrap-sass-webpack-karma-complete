@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server --content-base src/ --hot --port 8181",
-    "build": "webpack && cp ./src/index.html ./dist/index.html",
+    "build": "webpack && cp ./src/index.html ./dist/index.html && cp mbox.js ./dist/mbox.js",
     "test": "karma start"
   },
   "author": "Zhentian <answer881215@gmail.com> (http://zhentian.herokuapp.com/)",
